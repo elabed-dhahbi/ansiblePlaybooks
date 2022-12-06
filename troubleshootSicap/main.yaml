@@ -1,0 +1,9 @@
+---
+- name: troubleshooting sicap system
+  hosts: redhat
+  become: true
+  gather_facts: true
+  tasks: 
+    - name: monitoring our sicap systems
+      ansible.builtin.debug:
+       var: {{ansible_hostname}}

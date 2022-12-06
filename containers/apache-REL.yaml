@@ -1,0 +1,27 @@
+---
+- name: deploy httpd on container
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: podman installed
+      ansible.builtin.yum:
+        name: podman
+        state: latest
+
+    - name: pull image
+      container.podman.podman_image:
+        name: httpd
+        pull: true
+        tag: latest
+
+    - name: run httpd container
+      container.podman.podman_container:
+        name: webserver
+        image: httpd
+        state: started
+        detach: true
+        expose: 
+          - 80
+        ports:
+          - 8080:80

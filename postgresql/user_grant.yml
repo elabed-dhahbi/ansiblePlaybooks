@@ -1,0 +1,20 @@
+---
+- name: postgresql
+  hosts: all
+  vars:
+    db_user: myuser
+    db_name: testdb
+  tasks:
+    - name: Utility present
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+    - name: Grant db user access to db
+      community.postgresql.postgresql_privs:
+        type: database
+        database: "{{ db_name }}"
+        roles: "{{ db_user }}"
+        prvis: all
+        grant_option: false
+      become: true
+      become_user: postgres

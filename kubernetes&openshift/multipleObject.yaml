@@ -1,0 +1,13 @@
+---
+- name: k8s 
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Apply K8s
+      kubernetes.core.k8s:
+        definition: "{{ lookup('template','{{item }}'|from_yaml)}}"
+      with_fileglob:
+        - "./defs/mynamespace.yaml"
+        - "./defs/mypod.yaml"
+        - "./defs/myservice.yaml"

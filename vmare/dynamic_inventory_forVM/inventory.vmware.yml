@@ -1,0 +1,11 @@
+plugin: vmware_vm_inventory
+strict: false
+hostname: vmware.example.com
+username: elabed@vsphere.local
+password: abeddahbi
+validate_certs: false
+with_tags: false
+groups:
+  VMs: true
+#the commands you need to apply
+# ansible-inventory -i inventory.vmware.yml --list

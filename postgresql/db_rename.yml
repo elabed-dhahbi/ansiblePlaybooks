@@ -1,0 +1,19 @@
+---
+- name: postgresql rename db
+  hosts: all
+  become: true
+  vars:
+    db_name: testdb
+    db_newname: exampledb
+  tasks:
+    - name: Utility present
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+    - name: Rename db
+      community.postgresql.postgresql_db:
+        state: rename
+        name: "{{ db_name }}"
+        target: "{{ db_newname }}"
+      become: true
+      become_user: postgres

@@ -1,0 +1,6 @@
+
+[all]
+ansible1
+ansible2
+[redhat]
+node01

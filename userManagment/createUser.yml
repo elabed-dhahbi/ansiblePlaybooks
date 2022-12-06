@@ -1,0 +1,19 @@
+---
+- name: create user account
+  hosts: all
+  become: true
+  tasks:
+    - name:  user nash present
+      ansible.builtin.user:
+        name: nash
+        password: "{{ 'password' |password_hash('sha512','mysecretsalt')}}"
+        groups:
+          - wheel
+          - adm
+        state: present
+        shell: "/bin/bash"
+        system: false
+        create_home: true
+        home: "/home/nash"
+        comment: "Ansible User"
+        generate_ssh_key: true

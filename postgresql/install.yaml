@@ -1,0 +1,27 @@
+---
+- name: postgresql 
+  hosts: all
+  become: true
+  tasks:
+    - name: Install package
+      ansible.builtin.yum:
+        name:
+          - postgresql
+          - postgresql-server
+          - python3-psycog2
+        state: present
+
+    - name: check if Postgresql is installed
+      ansible.builtin.stat:
+        path: "/var/lib/pgsql/data/pg_hba.conf"
+      register: postgres_data
+
+    - name: initialize Postgresql
+      ansible.builtin.shell: "postgresql-setup initdb"
+      when: not postgres_data.stat.exists
+
+    - name: start and enable postgresql
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true

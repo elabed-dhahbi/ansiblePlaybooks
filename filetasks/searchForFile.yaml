@@ -1,0 +1,19 @@
+---
+- name: find file with spacific extention
+  hosts: all 
+  vars: 
+    mypath: "/home/devops/example"
+    mypattern: "*.cnf,*.conf"
+  tasks:
+    - name: search files
+      ansible.builtin.find:
+        paths: "{{ mypath }}"
+        hidden: true
+        recurse: true
+        file_type: any
+        patterns: "{{ mypattern }}"
+      register: found_files
+
+    - name: print files
+      ansible.builtin.debug:
+        var: found_files

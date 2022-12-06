@@ -1,0 +1,15 @@
+---
+- name: adding user to another group
+  hosts: all
+  become: true
+  vars: 
+    myuser: "nash"
+    mygroups:
+      - adm
+      - sys
+  tasks:
+    - name: adding secondary groups
+      ansible.builtin.user:
+       name: "{{ myuser }}"
+       groups: "{{ mygroups }}"
+       append: true

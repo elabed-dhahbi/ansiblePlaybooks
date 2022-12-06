@@ -1,0 +1,9 @@
+---
+- name: read file on host
+  hosts: all
+  vars: 
+    contents: " {{ lookup('file','example.txt')}}"
+  tasks:
+   - name: print file
+     ansible.builtin.debug:
+     msg: "the content of file is {{ contents}}"

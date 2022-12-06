@@ -1,0 +1,23 @@
+---
+- name: flatpack module
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: flatpak present
+      ansible.builtin.apt:
+        name: flatpak
+        state: present
+
+    - name: flathub flatpak repo
+      community.general.flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
+
+    - name: install Zoom via flatpak
+      community.general.flatpak:
+        name: us.zoom.Zoom
+        state: present
+        method: system

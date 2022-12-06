@@ -1,0 +1,48 @@
+---
+- name: install Docker
+  hosts: all
+  become: true
+  tasks:
+    - name: remove existing packages
+      ansible.builtin.yum:
+        name: 
+          - docker-client 
+          - docker-client-latest 
+          - docker-common 
+          - docker-latest 
+          - docker-latest-logrotate 
+          - docker-logrotate 
+          - docker-engine 
+          - podman 
+          - runc
+    - name: set mydistribution
+      ansible.builtin.set_fact:
+      mydistribution: "{{ 'rhel' if (ansible_distribution == 'Red Hat Enterprise Linux') else (ansible_distribution |lower)}}"
+    - name: Add signing key
+      ansible.builtin.rpm_key:
+        key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
+        state: present
+
+    - name: Add repository into repo.d list
+      ansible.builtin.yum.repository:
+        name: docker
+        description: docker repository
+        baseurl: "https://download.docker.com/linux/{{mydistribution}}/$releasever/$basearc"
+        enable: true
+        gpgcheck: true
+        gpgkey: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
+        
+    - name: Install docker
+      ansible.builtin.yum:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: latest
+        update_cache: true
+    - name: Start Docker
+      ansible.builtin.service:
+        name: "docker"
+        state: started
+        enabled: true

@@ -1,0 +1,21 @@
+---
+- name: query 
+  hosts: all
+  become: true
+  vars: 
+    db_name: testdb
+  tasks:
+    - name: Utility present
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+    - name: run sql
+      community.postgresql.postgresql_query:
+        db: "{{ db_name }}"
+        query: "select version()"
+      become: true
+      become_user: postgres
+      register: sql_data
+    - name: print
+      ansible.builtin.debug:
+        var: sql_data

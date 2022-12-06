@@ -1,0 +1,38 @@
+---
+- name: k8s volume
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    myproject: "volume-example"
+  tasks:
+    - name: create {{ myproject }} namespace
+      kubernetes.core.k8s:
+        kind: Namespace
+        name: "{{ myproject}}"
+        api_version: v1
+
+    - name: create k8s pod
+      kubernetes.core.k8s:
+      state: present
+      namespace: "{{ myproject }}"
+      definition:
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: redis
+          labels:
+            name: redis
+        spec:
+          containers:
+          - name: redis
+            image: redis
+            volumeMounts:
+              - name: redis-storage
+                mountPath: /data/redis
+
+          volumes:
+            - name: redis-storage
+              emptyDir: {}
+        
+      

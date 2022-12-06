@@ -1,0 +1,31 @@
+---
+- name: postgresql
+  hosts: all
+  become: true
+  vars:
+    db_user: myuser
+
+  tasks: 
+    - name: Utitlity present
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+    - name: Allow md5 connection for the db user/role
+      community.postgresql.postgresql_pg_hba:
+        dest: "~/data/pg_hba.conf"
+        conftype: host
+        databases: all
+        method: md5
+        users: "{{ db_user }}"
+        create: true
+      become: true
+      become_user: postgres
+      notify: Restart service
+
+  handler:
+    - name: Restart service
+      ansible.builtin.service:
+        name: postgresql
+        state: restarted
+
+     

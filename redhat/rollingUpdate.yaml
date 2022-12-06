@@ -1,0 +1,10 @@
+---
+- name: rolling update
+  hosts: all
+  become: true
+  tasks:
+    - name: ensure pkg updated
+      yum: 
+        name: nginx
+        state: lates
+        update_cache: true

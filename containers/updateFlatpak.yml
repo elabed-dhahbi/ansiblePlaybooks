@@ -1,0 +1,8 @@
+---
+- name: flatpak update
+  hosts: all
+  become: true
+  gatehr_facts: false
+  tasks:
+    - name: update flatpak(s)
+      ansible.builtin.command: "flatpak update --noninteractive"

@@ -1,0 +1,9 @@
+---
+- name: install module in debian like system
+  hosts: all
+  become: true
+  tasks:
+    - name: install package
+      ansible.builtin.apt:
+        name: wget 
+        state: present

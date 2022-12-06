@@ -1,0 +1,10 @@
+--- 
+- name: user module demo
+  hosts: all
+  become: true
+  tasks:
+    - name: user nash delete
+      ansible.builtin.user:
+        name: nash
+        state: absent
+        remove: true

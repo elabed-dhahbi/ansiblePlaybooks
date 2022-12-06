@@ -1,0 +1,10 @@
+---
+- name: rolling  update 
+  hosts: all
+  become: true
+  tasks:
+    - name: ensure pkg update
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+        update_cache: true  

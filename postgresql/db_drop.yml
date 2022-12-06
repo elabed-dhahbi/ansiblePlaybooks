@@ -1,0 +1,16 @@
+---
+- name: postgresql
+  become: true
+  vars:
+    db_name: testdb
+  tasks:
+    - name: Utility present
+      ansible.builtin.package:
+        name: python3-psycopg2
+        state: present
+    - name: Drop db
+      community.postgresql.postgresql_db:
+       state: absent
+       name: "{{ db_name }}"
+      become: true
+      become_user: postgres
